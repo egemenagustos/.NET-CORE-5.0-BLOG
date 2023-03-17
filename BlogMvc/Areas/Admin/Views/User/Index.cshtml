@@ -1,0 +1,88 @@
+﻿@model BlogEntities.Dtos.UserListDto
+
+@using BlogShared.Utilities.Results.ComplexTypes
+
+@{
+    ViewData["Title"] = "Kullanıcılar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<ol class="breadcrumb mb-3 mt-2">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Admin</a></li>
+        <li class="breadcrumb-item active"><a asp-action="Index" asp-controller="User" asp-area="Admin">Kullanıcılar</a></li>
+    </ol>
+@if (Model.ResultStates == ResultStates.Success)
+{
+    <div class="animsition">
+    <div id="modal" aria-hidden="true"></div>
+    <div class="card mb-4 mt-2">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Kullanıcılar
+        </div>
+        <div class="card-body">
+            <div class="spinner-border" role="status" style="display:none;"><span class="sr-only">Yükleniyor...</span></div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Kullancı Adı</th>
+                            <th>E-Posta Adresi</th>
+                            <th>Adı</th>
+                            <th>Soyadı</th>
+                            <th>Telefon Numarası</th>
+                            <th>Hakkında</th>
+                            <th>Resim</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Kullancı Adı</th>
+                            <th>E-Posta Adresi</th>
+                            <th>Adı</th>
+                            <th>Soyadı</th>
+                            <th>Telefon Numarası</th>
+                            <th>Hakkında</th>
+                            <th>Resim</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var users in Model.Users)
+                        {
+                            <tr name="@users.Id">
+                                <td>@users.UserName</td>
+                                <td>@users.Email</td>
+                                <td>@users.FirstName</td>
+                                <td>@users.LastName</td>
+                                <td>@users.PhoneNumber</td>
+                                <td>@(users.About.Length > 75 ? users.About.Substring(0, 75) : users.About)</td>
+                                <td><img src="/img/@users.Picture" alt="@users.UserName" class="my-image-table" /></td>
+                                <td>
+                                    <button class="btn btn-info btn-sm btn-detail" data-id="@users.Id"><span class="fas fa-newspaper"></span></button>
+                                    <button class="btn btn-warning btn-sm btn-assign" data-id="@users.Id"><span class="fas fa-user-shield"></span></button>
+                                    <button class="btn btn-primary btn-sm btn-update" data-id="@users.Id"><span class="fas fa-edit"></span></button>
+                                    <button class="btn btn-danger btn-sm btn-delete" data-id="@users.Id"><span class="fas fa-minus-circle"></span></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+}
+@if (Model.ResultStates == ResultStates.Error)
+{
+    <div class="alert alert-danger mt-3">
+        @Model.Message <br>
+        Dashboard sayfasına geri dönmek için lütfen <a class="alert-link" asp-area="Admin" asp-action="Index" asp-controller="Home">tıklayınız.</a>
+    </div>
+}
+
+@section Scripts
+    {
+<script src="~/AdminLTE/js/userIndex.js" type="application/ecmascript"></script>
+}
+

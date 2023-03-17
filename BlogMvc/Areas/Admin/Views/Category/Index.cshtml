@@ -1,0 +1,92 @@
+﻿@model BlogEntities.Dtos.CategoryListDto
+
+@using BlogShared.Utilities.Results.ComplexTypes
+
+@{
+    ViewData["Title"] = "Kategoriler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <ol class="breadcrumb mb-3 mt-2">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Admin</a></li>
+        <li class="breadcrumb-item active"><a asp-action="Index" asp-controller="Category" asp-area="Admin">Kategoriler</a></li>
+    </ol>
+    @if (Model.ResultStates == ResultStates.Success)
+    {
+        <div class="animsition">
+        <div id="modal" aria-hidden="true"></div>
+        <div class="card mb-4 mt-2">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Kategoriler
+            </div>
+            <div class="card-body">
+                <div class="spinner-border" role="status" style="display:none;"><span class="sr-only">Yükleniyor...</span></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="categoriesTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Adı</th>
+                                <th>Açıklaması</th>
+                                <th>Aktif Mi?</th>
+                                <th>Silinmiş Mi?</th>
+                                <th>Oluşturulma Tarihi</th>
+                                <th>Oluşturan Kullanıcı Adı</th>
+                                <th>Son Düzenlenme Tarihi</th>
+                                <th>Son Düzenleyen Kullanıcı Adı</th>
+                                <th>Not</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Adı</th>
+                                <th>Açıklaması</th>
+                                <th>Aktif Mi?</th>
+                                <th>Silinmiş Mi?</th>
+                                <th>Oluşturulma Tarihi</th>
+                                <th>Oluşturan Kullanıcı Adı</th>
+                                <th>Son Düzenlenme Tarihi</th>
+                                <th>Son Düzenleyen Kullanıcı Adı</th>
+                                <th>Not</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <tr name="@category.Id">
+                                    <td>@category.Name</td>
+                                    <td>@category.Description</td>
+                                    <td>@(category.IsActive ? "Evet" : "Hayır")</td>
+                                    <td>@(category.IsDeleted ? "Evet" : "Hayır")</td>
+                                    <td>@category.CreatedDate</td>
+                                    <td>@category.CreatedByName</td>
+                                    <td>@category.ModifiedDate</td>
+                                    <td>@category.ModifiedByName</td>
+                                    <td>@category.Note</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm btn-update" data-id="@category.Id"><span class="fas fa-edit"></span></button>
+                                        <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+    }
+    @if (Model.ResultStates == ResultStates.Error)
+    {
+    <div class="alert alert-danger mt-3">
+            @Model.Message <br>
+        Dashboard sayfasına geri dönmek için lütfen <a class="alert-link" asp-area="Admin" asp-action="Index" asp-controller="Home">tıklayınız.</a>
+    </div>
+    }
+
+    @section Scripts
+        {
+    <script src="~/AdminLTE/js/categoryIndex.js" type="application/ecmascript"></script>
+}
+
